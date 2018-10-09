@@ -10,11 +10,10 @@
     app:cardCornerRadius="10dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="@color/ltgray"
     android:foreground="?selectableItemBackground">
 
     <LinearLayout
-        android:id="@+id/main_layout"
+        android:id="@+id/main_layout_full_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ltgray"
@@ -22,7 +21,7 @@
 
         <!--suppress AndroidLintContentDescription -->
         <com.example.xyzreader.ui.DynamicHeightNetworkImageView
-            android:id="@+id/thumbnail"
+            android:id="@+id/thumbnail_full_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
@@ -30,7 +29,7 @@
             android:background="@color/photo_placeholder" />
 
         <TextView
-            android:id="@+id/article_title"
+            android:id="@+id/article_title_full_size"
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +42,7 @@
             android:maxLines="4" />
 
         <TextView
-            android:id="@+id/article_subtitle"
+            android:id="@+id/article_subtitle_full_size"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

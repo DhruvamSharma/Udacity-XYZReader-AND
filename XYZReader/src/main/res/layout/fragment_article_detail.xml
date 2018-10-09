@@ -1,5 +1,6 @@
 <com.example.xyzreader.ui.DrawInsetsFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:frisson="http://schemas.android.com/apk/res-auto"
     android:id="@+id/draw_insets_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -20,12 +21,19 @@
                 android:background="@color/photo_placeholder">
                 <!--suppress AndroidLintContentDescription -->
 
-                <ImageView
+                <com.intrusoft.library.FrissonView
                     android:id="@+id/photo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
-                    android:adjustViewBounds="true"/>
+                    android:adjustViewBounds="true"
+                    frisson:tideCount="3"
+                    frisson:tideHeight="40dp"
+                    frisson:alphaValue="50"
+                    frisson:tintColor="#000000"
+                    frisson:gradientType="radial"
+                    frisson:gradient_endColor="#cc000000"
+                    frisson:gradient_startColor="#00000000"/>
 
 
             </FrameLayout>
