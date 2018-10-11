@@ -21,19 +21,13 @@
                 android:background="@color/photo_placeholder">
                 <!--suppress AndroidLintContentDescription -->
 
-                <com.intrusoft.library.FrissonView
-                    android:id="@+id/photo"
+                <ImageView
+                    android:id="@+id/thumbnail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:transitionName="shared"
                     android:scaleType="centerCrop"
-                    android:adjustViewBounds="true"
-                    frisson:tideCount="3"
-                    frisson:tideHeight="40dp"
-                    frisson:alphaValue="50"
-                    frisson:tintColor="#000000"
-                    frisson:gradientType="radial"
-                    frisson:gradient_endColor="#cc000000"
-                    frisson:gradient_startColor="#00000000"/>
+                    android:adjustViewBounds="true" />
 
 
             </FrameLayout>
@@ -45,7 +39,7 @@
                 android:layout_gravity="center_horizontal"
                 android:maxWidth="@dimen/detail_card_max_width"
                 android:background="#fff"
-                android:elevation="2dp"
+                android:elevation="32dp"
                 android:layout_marginTop="@dimen/detail_card_top_margin">
 
                 <LinearLayout

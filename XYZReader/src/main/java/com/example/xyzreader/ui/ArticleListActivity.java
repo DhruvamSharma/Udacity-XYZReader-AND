@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -62,6 +65,8 @@ public class ArticleListActivity extends ActionBarActivity implements
 
     private static final int VIEW_TYPE_NORMAL = 1;
     private static final int VIEW_TYPE_FULL_SIZE = 2;
+
+    public DynamicHeightNetworkImageView thumbnail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +137,7 @@ public class ArticleListActivity extends ActionBarActivity implements
             @Override
             public int getSpanSize(int position) {
                 if ((position+1) %3 == 0) {
-                    return 2;
+                    return 1;
                 } else
                     return 1;
             }
@@ -196,7 +201,7 @@ public class ArticleListActivity extends ActionBarActivity implements
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             mCursor.moveToPosition(position);
 
             if(holder.getItemViewType() == VIEW_TYPE_NORMAL) {
@@ -223,6 +228,7 @@ public class ArticleListActivity extends ActionBarActivity implements
                         mCursor.getString(ArticleLoader.Query.THUMB_URL),
                         ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
                 viewHolderNormal.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+
 
             } else {
 
@@ -274,16 +280,19 @@ public class ArticleListActivity extends ActionBarActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(viewHolder.getAdapterPosition()))));
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
+                            ItemsContract.Items.buildItemUri(getItemId(viewHolder.getAdapterPosition())));
+
+                    startActivity( intent);
                 }
             });
 
         }
     }
 
-    public static class ViewHolderNormal extends RecyclerView.ViewHolder {
-        public LinearLayout mainBackground;
+    public class ViewHolderNormal extends RecyclerView.ViewHolder {
+        public ConstraintLayout mainBackground;
         public DynamicHeightNetworkImageView thumbnailView;
         public TextView titleView;
         public TextView subtitleView;
@@ -293,13 +302,14 @@ public class ArticleListActivity extends ActionBarActivity implements
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
             titleView = (TextView) view.findViewById(R.id.article_title);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
-            mainBackground = (LinearLayout) view.findViewById(R.id.main_layout);
+            mainBackground = (ConstraintLayout) view.findViewById(R.id.main_layout);
+
 
         }
     }
 
-    public static class ViewHolderFullSize extends RecyclerView.ViewHolder {
-        public LinearLayout mainBackground;
+    public class ViewHolderFullSize extends RecyclerView.ViewHolder {
+        public ConstraintLayout mainBackground;
         public DynamicHeightNetworkImageView thumbnailView;
         public TextView titleView;
         public TextView subtitleView;
@@ -309,7 +319,8 @@ public class ArticleListActivity extends ActionBarActivity implements
             thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail_full_size);
             titleView = (TextView) view.findViewById(R.id.article_title_full_size);
             subtitleView = (TextView) view.findViewById(R.id.article_subtitle_full_size);
-            mainBackground = (LinearLayout) view.findViewById(R.id.main_layout);
+            mainBackground = (ConstraintLayout) view.findViewById(R.id.main_layout);
+
 
         }
     }

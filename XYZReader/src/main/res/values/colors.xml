@@ -18,11 +18,18 @@
 <resources>
     <color name="photo_placeholder">#ccc</color>
 
-    <color name="theme_primary">#FFDE03</color>
-    <color name="theme_primary_dark">#f2c203</color>
-    <color name="theme_accent">#0336FF</color>
+    <color name="theme_primary">@color/royal_blue_light</color>
+    <color name="theme_primary_dark">@color/royal_blue_dark</color>
+    <color name="theme_accent">@color/grammarly_green_color</color>
     <color name="ltgray">#ffe0e0e0</color>
     <color name="textColorOnDarkBackgroundsDarker">#000</color>
     <color name="textColorOnDarkBackgroundsLighter">#6000</color>
     <color name="mainListBackgroundColor">#fff</color>
+
+
+    <color name="alice_blue">#FCFDFE</color>
+    <color name="cornflower_blue">#509BF5</color>
+    <color name="royal_blue_light">#4568F0</color>
+    <color name="royal_blue_dark">#3F68D9</color>
+    <color name="grammarly_green_color">#2cb673</color>
 </resources>
