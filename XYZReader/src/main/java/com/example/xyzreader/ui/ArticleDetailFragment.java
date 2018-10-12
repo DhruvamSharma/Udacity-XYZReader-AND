@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -273,6 +274,9 @@ public class ArticleDetailFragment extends Fragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
+        Toast.makeText(getActivityCast().getApplicationContext(), "started", Toast.LENGTH_SHORT).show();
+
         return ArticleLoader.newInstanceForItemId(getActivity(), mItemId);
     }
 
