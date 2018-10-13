@@ -17,7 +17,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/alice_blue"
         android:orientation="vertical">
 
@@ -70,7 +70,7 @@
             android:id="@+id/article_subtitle"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="match_parent"
-            android:layout_height="39dp"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingBottom="16dp"

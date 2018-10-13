@@ -86,8 +86,6 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             android:background="@color/photo_placeholder" />
 
 
