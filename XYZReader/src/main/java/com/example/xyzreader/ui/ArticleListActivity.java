@@ -137,7 +137,7 @@ public class ArticleListActivity extends ActionBarActivity implements
             @Override
             public int getSpanSize(int position) {
                 if ((position+1) %3 == 0) {
-                    return 1;
+                    return 2;
                 } else
                     return 1;
             }
@@ -224,6 +224,10 @@ public class ArticleListActivity extends ActionBarActivity implements
                                     + "<br/>" + " by "
                                     + mCursor.getString(ArticleLoader.Query.AUTHOR)));
                 }
+
+
+
+
                 viewHolderNormal.thumbnailView.setImageUrl(
                         mCursor.getString(ArticleLoader.Query.THUMB_URL),
                         ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());

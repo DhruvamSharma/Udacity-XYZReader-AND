@@ -13,75 +13,87 @@
     android:background="@color/alice_blue"
     android:foreground="?selectableItemBackground">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/main_layout_full_size"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/alice_blue"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/main_layout_full_size"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:background="@color/alice_blue"
+            android:orientation="vertical">
 
 
+            <TextView
+                android:id="@+id/article_title_full_size"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="4dp"
+                android:textColor="@color/textColorOnDarkBackgroundsDarker"
+                android:ellipsize="end"
+                android:maxLines="4"
 
-        <!--suppress AndroidLintContentDescription -->
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/article_subtitle_full_size"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="@color/textColorOnDarkBackgroundsLighter"
+
+                app:layout_constraintStart_toStartOf="@id/article_title"
+                app:layout_constraintTop_toBottomOf="@+id/article_title_full_size" />
+
+            <TextView
+                android:id="@+id/article_to_detail_full_size"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp"
+                android:textColor="@color/theme_accent"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="@string/learn_more"
+
+                app:layout_constraintStart_toStartOf="@id/article_subtitle_full_size"
+                app:layout_constraintTop_toBottomOf="@id/article_subtitle_full_size"/>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
         <com.example.xyzreader.ui.DynamicHeightNetworkImageView
             android:id="@+id/thumbnail_full_size"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:visibility="invisible"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:background="@color/photo_placeholder" />
 
-        <TextView
-            android:id="@+id/article_title_full_size"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="4dp"
-            android:textColor="@color/textColorOnDarkBackgroundsDarker"
-            android:ellipsize="end"
-            android:maxLines="4"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/article_subtitle_full_size"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textColor="@color/textColorOnDarkBackgroundsLighter"
-
-            app:layout_constraintStart_toStartOf="@id/article_title"
-            app:layout_constraintTop_toBottomOf="@+id/article_title_full_size" />
-
-        <TextView
-            android:id="@+id/article_to_detail_full_size"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="16dp"
-            android:textColor="@color/theme_accent"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:text="@string/learn_more"
-
-            app:layout_constraintStart_toStartOf="@id/article_subtitle_full_size"
-            app:layout_constraintTop_toBottomOf="@id/article_subtitle_full_size"/>
 
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+
+
 
 </android.support.v7.widget.CardView>

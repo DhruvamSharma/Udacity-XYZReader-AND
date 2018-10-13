@@ -275,7 +275,6 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
-        Toast.makeText(getActivityCast().getApplicationContext(), "started", Toast.LENGTH_SHORT).show();
 
         return ArticleLoader.newInstanceForItemId(getActivity(), mItemId);
     }
