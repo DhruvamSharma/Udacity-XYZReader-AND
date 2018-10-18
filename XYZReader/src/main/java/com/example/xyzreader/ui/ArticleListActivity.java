@@ -16,7 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -37,6 +38,7 @@ import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
+import com.udafil.dhruvamsharma.loadinglib.KeepLoading;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +51,7 @@ import java.util.GregorianCalendar;
  * touched, lead to a {@link ArticleDetailActivity} representing item details. On tablets, the
  * activity presents a grid of items as cards.
  */
-public class ArticleListActivity extends ActionBarActivity implements
+public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = ArticleListActivity.class.toString();
@@ -112,6 +114,7 @@ public class ArticleListActivity extends ActionBarActivity implements
         public void onReceive(Context context, Intent intent) {
             if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {
                 mIsRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);
+
                 updateRefreshingUI();
             }
         }
@@ -123,11 +126,13 @@ public class ArticleListActivity extends ActionBarActivity implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
         return ArticleLoader.newAllArticlesInstance(this);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+
         Adapter adapter = new Adapter(cursor);
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);

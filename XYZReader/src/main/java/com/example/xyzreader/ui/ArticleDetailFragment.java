@@ -43,7 +43,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
-import com.intrusoft.library.FrissonView;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
