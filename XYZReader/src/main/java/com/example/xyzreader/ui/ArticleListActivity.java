@@ -77,12 +77,9 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
-        final View toolbarContainerView = findViewById(R.id.toolbar_container);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
@@ -136,17 +133,9 @@ public class ArticleListActivity extends AppCompatActivity implements
         Adapter adapter = new Adapter(cursor);
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
-        int columnCount = 2;
+        int columnCount = 1;
         GridLayoutManager sglm = new GridLayoutManager(getApplicationContext(), columnCount);
-        sglm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                if ((position+1) %3 == 0) {
-                    return 2;
-                } else
-                    return 1;
-            }
-        });
+
         mRecyclerView.setLayoutManager(sglm);
     }
 
@@ -155,7 +144,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(null);
     }
 
-    private class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class Adapter extends RecyclerView.Adapter<ViewHolderFullSize> {
         private Cursor mCursor;
 
         public Adapter(Cursor cursor) {
@@ -169,27 +158,15 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolderFullSize onCreateViewHolder(ViewGroup parent, int viewType) {
 
             LayoutInflater inflater = getLayoutInflater();
-            final RecyclerView.ViewHolder viewHolder;
+            final ViewHolderFullSize viewHolder;
 
-            if(viewType == VIEW_TYPE_NORMAL) {
+            View view = inflater.inflate(R.layout.list_item_article_full_size, parent, false);
+            viewHolder = new ViewHolderFullSize( view );
 
-                View view = inflater.inflate(R.layout.list_item_article, parent, false);
-                viewHolder = new ViewHolderNormal( view );
-
-                clickHandler(view, viewHolder);
-
-            } else {
-
-                View view = inflater.inflate(R.layout.list_item_article_full_size, parent, false);
-                viewHolder = new ViewHolderFullSize( view );
-
-                clickHandler(view, viewHolder);
-            }
-
-
+            clickHandler(view, viewHolder);
 
             return viewHolder;
         }
@@ -206,40 +183,10 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolderFullSize holder, int position) {
             mCursor.moveToPosition(position);
 
-            if(holder.getItemViewType() == VIEW_TYPE_NORMAL) {
 
-                ViewHolderNormal viewHolderNormal = (ViewHolderNormal) holder;
-                viewHolderNormal.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-                Date publishedDate = parsePublishedDate();
-                if (!publishedDate.before(START_OF_EPOCH.getTime())) {
-
-                    viewHolderNormal.subtitleView.setText(Html.fromHtml(
-                            DateUtils.getRelativeTimeSpanString(
-                                    publishedDate.getTime(),
-                                    System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                                    DateUtils.FORMAT_ABBREV_ALL).toString()
-                                    + "<br/>" + " by "
-                                    + mCursor.getString(ArticleLoader.Query.AUTHOR)));
-                } else {
-                    viewHolderNormal.subtitleView.setText(Html.fromHtml(
-                            outputFormat.format(publishedDate)
-                                    + "<br/>" + " by "
-                                    + mCursor.getString(ArticleLoader.Query.AUTHOR)));
-                }
-
-
-
-
-                viewHolderNormal.thumbnailView.setImageUrl(
-                        mCursor.getString(ArticleLoader.Query.THUMB_URL),
-                        ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-                viewHolderNormal.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
-
-
-            } else {
 
                 ViewHolderFullSize viewHolderNormal = (ViewHolderFullSize) holder;
                 viewHolderNormal.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
@@ -259,12 +206,18 @@ public class ArticleListActivity extends AppCompatActivity implements
                                     + "<br/>" + " by "
                                     + mCursor.getString(ArticleLoader.Query.AUTHOR)));
                 }
+
+
+//                Glide.with(ArticleListActivity.this)
+//                        .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+//                        .into(viewHolderNormal.thumbnailView);
+
                 viewHolderNormal.thumbnailView.setImageUrl(
                         mCursor.getString(ArticleLoader.Query.THUMB_URL),
                         ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
                 viewHolderNormal.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
 
-            }
+
 
 
         }
@@ -308,10 +261,10 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         public ViewHolderNormal(View view) {
             super(view);
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-            titleView = (TextView) view.findViewById(R.id.article_title);
-            subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
-            mainBackground = (ConstraintLayout) view.findViewById(R.id.main_layout);
+            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail_full_size);
+            titleView = (TextView) view.findViewById(R.id.article_title_full_size);
+            subtitleView = (TextView) view.findViewById(R.id.article_subtitle_full_size);
+            mainBackground = (ConstraintLayout) view.findViewById(R.id.main_layout_full_size);
 
 
         }
