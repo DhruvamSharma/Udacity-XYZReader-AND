@@ -1,5 +1,7 @@
 package com.example.xyzreader.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
@@ -26,7 +28,10 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +75,16 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     public DynamicHeightNetworkImageView thumbnail;
 
+
+    View rootLayout;
+
+    private int revealX;
+    private int revealY;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,13 +93,46 @@ public class ArticleListActivity extends AppCompatActivity implements
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-
+        rootLayout = findViewById(R.id.root_layout);
         mRecyclerView = findViewById(R.id.recycler_view);
         getLoaderManager().initLoader(0, null, this);
+
+        Intent intent = getIntent();
+
+        if(savedInstanceState == null && intent.hasExtra(getResources().getString(R.string.extra_reveal_x))
+                && intent.hasExtra(getResources()
+                .getString(R.string.extra_reveal_y)) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                startActivityWithRevealAnimation(intent);
+
+        } else {
+            rootLayout.setVisibility(View.VISIBLE);
+        }
 
         if (savedInstanceState == null) {
             refresh();
         }
+    }
+
+    private void startActivityWithRevealAnimation(Intent intent) {
+
+        rootLayout.setVisibility(View.INVISIBLE);
+
+        revealX = intent.getIntExtra(getResources().getString(R.string.extra_reveal_x), 0);
+        revealY = intent.getIntExtra(getResources().getString(R.string.extra_reveal_y), 0);
+
+
+        ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    revealActivity(revealX, revealY);
+                    rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+        }
+
     }
 
     private void refresh() {
@@ -284,6 +332,26 @@ public class ArticleListActivity extends AppCompatActivity implements
             mainBackground = (ConstraintLayout) view.findViewById(R.id.main_layout);
 
 
+        }
+    }
+
+
+
+
+    protected void revealActivity(int x, int y) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            float finalRadius = (float) (Math.max(rootLayout.getWidth(), rootLayout.getHeight()) * 1.1);
+
+            // create the animator for this view (the start radius is zero)
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(rootLayout, x, y, 0, finalRadius);
+            circularReveal.setDuration(400);
+            circularReveal.setInterpolator(new AccelerateInterpolator());
+
+            // make the view visible and start the animation
+            rootLayout.setVisibility(View.VISIBLE);
+            circularReveal.start();
+        } else {
+            finish();
         }
     }
 

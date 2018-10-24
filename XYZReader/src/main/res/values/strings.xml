@@ -12,5 +12,7 @@
 
     <string name="start_loading_tag">START LOADING</string>
     <string name="stop_loading_tag">STOP_LOADING</string>
+    <string name="extra_reveal_x">EXTRA_REVEAL_X</string>
+    <string name="extra_reveal_y">EXTRA_REVEAL_Y</string>
 
 </resources>
