@@ -135,30 +135,23 @@ public class ArticleDetailFragment extends Fragment implements
         });
 
         mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
-        mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
-            @Override
-            public void onScrollChanged() {
-                mScrollY = mScrollView.getScrollY();
-                getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
-                mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
-                updateStatusBar();
-            }
+        mScrollView.setCallbacks(() -> {
+            mScrollY = mScrollView.getScrollY();
+            getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
+            mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
+            updateStatusBar();
         });
 
-        mPhotoView = (ImageView) mRootView.findViewById(R.id.thumbnail);
+        mPhotoView =  mRootView.findViewById(R.id.thumbnail);
         mPhotoContainerView = mRootView.findViewById(R.id.photo_container);
 
         mStatusBarColorDrawable = new ColorDrawable(0);
 
-        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
-                        .setType("text/plain")
-                        .setText("Some sample text")
-                        .getIntent(), getString(R.string.action_share)));
-            }
-        });
+        mRootView.findViewById(R.id.share_fab).setOnClickListener(view -> startActivity
+                (Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                .setType("text/plain")
+                .setText("Some sample text")
+                .getIntent(), getString(R.string.action_share))));
 
         bindViews();
         updateStatusBar();

@@ -54,9 +54,25 @@ public class ArticleDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_article_detail);
 
         getLoaderManager().initLoader(0, null, this);
+        Toast.makeText(ArticleDetailActivity.this, "started", Toast.LENGTH_SHORT).show();
+        if (savedInstanceState == null) {
+            if (getIntent() != null && getIntent().getData() != null) {
+                mStartId = ItemsContract.Items.getItemId(getIntent().getData());
+                mSelectedItemId = mStartId;
+            }
+        }
 
+
+    }
+
+    /**
+     * This method is created so as to remove the load from the onCreate so as
+     * to decrease the load time. And this is called only when the data has been loaded.
+     * TODO what is the side effect of this technique?
+     */
+    private void setUpActivity() {
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
-        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager = findViewById(R.id.pager);
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageMargin((int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
@@ -98,12 +114,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             });
         }
 
-        if (savedInstanceState == null) {
-            if (getIntent() != null && getIntent().getData() != null) {
-                mStartId = ItemsContract.Items.getItemId(getIntent().getData());
-                mSelectedItemId = mStartId;
-            }
-        }
+
     }
 
     @Override
@@ -115,6 +126,10 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+
+        setUpActivity();
+        Toast.makeText(ArticleDetailActivity.this, "finished", Toast.LENGTH_SHORT).show();
+
         mCursor = cursor;
         mPagerAdapter.notifyDataSetChanged();
 
