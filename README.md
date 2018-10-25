@@ -19,6 +19,11 @@ This project gives you an opportunity to improve an app’s design, a vital skil
 
 = Screenshots: 
 
+### Draft 2 :
+<img src = "https://github.com/DhruvamSharma/Udacity-XYZReader-AND/blob/master/screenshots/WhatsApp%20Image%202018-10-25%20at%206.33.53%20PM.jpeg" width = 200> <img src = "https://github.com/DhruvamSharma/Udacity-XYZReader-AND/blob/master/screenshots/Screenshot_1540472427.png" width = 200> <img src = "https://github.com/DhruvamSharma/Udacity-XYZReader-AND/blob/master/screenshots/Screenshot_20181017-195033%20(1).png" width = 200>
+
+
+
 ### Draft 1:
 
 <img src="https://github.com/DhruvamSharma/Udacity-XYZReader-AND/blob/master/screenshots/Screenshot_20181017-195006.png" width = 200>
