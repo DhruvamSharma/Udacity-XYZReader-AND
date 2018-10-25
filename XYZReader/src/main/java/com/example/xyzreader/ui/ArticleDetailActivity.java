@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -26,13 +28,15 @@ import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 
 /**
- * An activity representing a single Article detail screen, letting you swipe between articles.
+ * An activity representing a single Article detail screen,
+ * letting you swipe between articles.
  */
 public class ArticleDetailActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Cursor mCursor;
     private long mStartId;
+    private String transitionName;
 
     private long mSelectedItemId;
     private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
@@ -42,6 +46,7 @@ public class ArticleDetailActivity extends AppCompatActivity
     private MyPagerAdapter mPagerAdapter;
     private View mUpButtonContainer;
     private View mUpButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +59,15 @@ public class ArticleDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_article_detail);
 
         getLoaderManager().initLoader(0, null, this);
-        Toast.makeText(ArticleDetailActivity.this, "started", Toast.LENGTH_SHORT).show();
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
                 mSelectedItemId = mStartId;
+                Bundle extras = getIntent().getExtras();
+
+                assert extras != null;
+
+                transitionName = extras.getString("TRANSITION_NAME");
             }
         }
 
@@ -66,8 +75,9 @@ public class ArticleDetailActivity extends AppCompatActivity
     }
 
     /**
-     * This method is created so as to remove the load from the onCreate so as
-     * to decrease the load time. And this is called only when the data has been loaded.
+     * This method is created so as to remove the load from the
+     * onCreate so as to decrease the load time. And this is called
+     * only when the data has been loaded.
      * TODO what is the side effect of this technique?
      */
     private void setUpActivity() {
@@ -75,8 +85,11 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPager = findViewById(R.id.pager);
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageMargin((int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1
+                        , getResources().getDisplayMetrics()));
         mPager.setPageMarginDrawable(new ColorDrawable(0x22000000));
+
+
 
         mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -103,7 +116,8 @@ public class ArticleDetailActivity extends AppCompatActivity
         mUpButton.setOnClickListener(view -> onSupportNavigateUp());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mUpButtonContainer.setOnApplyWindowInsetsListener((view, windowInsets) -> {
+            mUpButtonContainer.setOnApplyWindowInsetsListener
+                    ((view, windowInsets) -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
                     view.onApplyWindowInsets(windowInsets);
                 }
@@ -128,7 +142,8 @@ public class ArticleDetailActivity extends AppCompatActivity
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
         setUpActivity();
-        Toast.makeText(ArticleDetailActivity.this, "finished", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ArticleDetailActivity.this,
+        // "finished", Toast.LENGTH_SHORT).show();
 
         mCursor = cursor;
         mPagerAdapter.notifyDataSetChanged();
@@ -155,7 +170,8 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPagerAdapter.notifyDataSetChanged();
     }
 
-    public void onUpButtonFloorChanged(long itemId, ArticleDetailFragment fragment) {
+    public void onUpButtonFloorChanged(long itemId,
+                                       ArticleDetailFragment fragment) {
         if (itemId == mSelectedItemId) {
             mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
             updateUpButtonPosition();
@@ -164,7 +180,8 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     private void updateUpButtonPosition() {
         int upButtonNormalBottom = mTopInset + mUpButton.getHeight();
-        mUpButton.setTranslationY(Math.min(mSelectedItemUpButtonFloor - upButtonNormalBottom, 0));
+        mUpButton.setTranslationY(Math.min(mSelectedItemUpButtonFloor
+                - upButtonNormalBottom, 0));
     }
 
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
@@ -173,7 +190,8 @@ public class ArticleDetailActivity extends AppCompatActivity
         }
 
         @Override
-        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        public void setPrimaryItem(ViewGroup container,
+                                   int position, Object object) {
             super.setPrimaryItem(container, position, object);
             ArticleDetailFragment fragment = (ArticleDetailFragment) object;
             if (fragment != null) {
@@ -185,7 +203,8 @@ public class ArticleDetailActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
-            return ArticleDetailFragment.newInstance(mCursor.getLong(ArticleLoader.Query._ID));
+            return ArticleDetailFragment.newInstance(mCursor.
+                    getLong(ArticleLoader.Query._ID), transitionName);
         }
 
         @Override

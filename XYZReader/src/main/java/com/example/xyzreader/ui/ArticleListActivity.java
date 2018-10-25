@@ -1,6 +1,7 @@
 package com.example.xyzreader.ui;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +12,8 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,6 +38,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -200,8 +204,6 @@ public class ArticleListActivity extends AppCompatActivity implements
             View view = inflater.inflate(R.layout.list_item_article_full_size, parent, false);
             viewHolder = new ViewHolderFullSize( view );
 
-            clickHandler(view, viewHolder);
-
             return viewHolder;
         }
 
@@ -221,13 +223,11 @@ public class ArticleListActivity extends AppCompatActivity implements
             mCursor.moveToPosition(position);
 
 
-
-                ViewHolderFullSize viewHolderNormal = (ViewHolderFullSize) holder;
-                viewHolderNormal.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+            holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
                 Date publishedDate = parsePublishedDate();
                 if (!publishedDate.before(START_OF_EPOCH.getTime())) {
 
-                    viewHolderNormal.subtitleView.setText(Html.fromHtml(
+                    holder.subtitleView.setText(Html.fromHtml(
                             DateUtils.getRelativeTimeSpanString(
                                     publishedDate.getTime(),
                                     System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
@@ -235,22 +235,21 @@ public class ArticleListActivity extends AppCompatActivity implements
                                     + "<br/>" + " by "
                                     + mCursor.getString(ArticleLoader.Query.AUTHOR)));
                 } else {
-                    viewHolderNormal.subtitleView.setText(Html.fromHtml(
+                    holder.subtitleView.setText(Html.fromHtml(
                             outputFormat.format(publishedDate)
                                     + "<br/>" + " by "
                                     + mCursor.getString(ArticleLoader.Query.AUTHOR)));
                 }
 
 
-//                Glide.with(ArticleListActivity.this)
-//                        .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
-//                        .into(viewHolderNormal.thumbnailView);
-
-                viewHolderNormal.thumbnailView.setImageUrl(
+                holder.thumbnailView.setImageUrl(
                         mCursor.getString(ArticleLoader.Query.THUMB_URL),
                         ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-                viewHolderNormal.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+                holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
 
+                //Setting the transition name
+                clickHandler(holder);
+                ViewCompat.setTransitionName(holder.itemView, mCursor.getString(ArticleLoader.Query.TITLE));
 
 
 
@@ -271,35 +270,20 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         }
 
-        private void clickHandler(View view, final RecyclerView.ViewHolder viewHolder) {
+        private void clickHandler( final RecyclerView.ViewHolder viewHolder) {
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            viewHolder.itemView.setOnClickListener(view12 -> {
 
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(viewHolder.getAdapterPosition())));
+                Intent intent = new Intent(Intent.ACTION_VIEW,
+                        ItemsContract.Items.buildItemUri(getItemId(viewHolder.getAdapterPosition())));
 
-                    startActivity( intent);
-                }
+                intent.putExtra("TRANSITION_NAME", ViewCompat.getTransitionName(viewHolder.itemView));
+
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ArticleListActivity.this,
+                        viewHolder.itemView, Objects.requireNonNull(ViewCompat.getTransitionName(viewHolder.itemView)));
+
+                startActivity( intent, optionsCompat.toBundle());
             });
-
-        }
-    }
-
-    public class ViewHolderNormal extends RecyclerView.ViewHolder {
-        public ConstraintLayout mainBackground;
-        public DynamicHeightNetworkImageView thumbnailView;
-        public TextView titleView;
-        public TextView subtitleView;
-
-        public ViewHolderNormal(View view) {
-            super(view);
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail_full_size);
-            titleView = (TextView) view.findViewById(R.id.article_title_full_size);
-            subtitleView = (TextView) view.findViewById(R.id.article_subtitle_full_size);
-            mainBackground = (ConstraintLayout) view.findViewById(R.id.main_layout_full_size);
-
 
         }
     }
@@ -312,10 +296,10 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         public ViewHolderFullSize(View view) {
             super(view);
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail_full_size);
-            titleView = (TextView) view.findViewById(R.id.article_title_full_size);
-            subtitleView = (TextView) view.findViewById(R.id.article_subtitle_full_size);
-            mainBackground = (ConstraintLayout) view.findViewById(R.id.main_layout);
+            thumbnailView = view.findViewById(R.id.thumbnail_full_size);
+            titleView = view.findViewById(R.id.article_title_full_size);
+            subtitleView = view.findViewById(R.id.article_subtitle_full_size);
+            mainBackground =  view.findViewById(R.id.main_layout);
 
 
         }
