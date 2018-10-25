@@ -21,4 +21,4 @@ This project gives you an opportunity to improve an app’s design, a vital skil
 
 ### Draft 1:
 
-![myimage-alt-tag](Udacity-XYZReader-AND/screenshots/Screenshot_20181017-195006.png)
+![myimage-alt-tag](https://github.com/DhruvamSharma/Udacity-XYZReader-AND/blob/master/screenshots/Screenshot_20181017-195006.png)
