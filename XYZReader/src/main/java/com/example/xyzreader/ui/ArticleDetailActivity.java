@@ -91,7 +91,7 @@ public class ArticleDetailActivity extends AppCompatActivity
 
 
 
-        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
