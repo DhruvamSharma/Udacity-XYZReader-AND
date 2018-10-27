@@ -1,5 +1,7 @@
 package com.example.xyzreader.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,18 +11,12 @@ import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.xyzreader.R;
@@ -36,7 +32,6 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     private Cursor mCursor;
     private long mStartId;
-    private String transitionName;
 
     private long mSelectedItemId;
     private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
@@ -47,6 +42,8 @@ public class ArticleDetailActivity extends AppCompatActivity
     private View mUpButtonContainer;
     private View mUpButton;
 
+    private LottieAnimationView animationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +53,10 @@ public class ArticleDetailActivity extends AppCompatActivity
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
+
         setContentView(R.layout.activity_article_detail);
+        animationView = findViewById(R.id.lottie_animation);
+
 
         getLoaderManager().initLoader(0, null, this);
         if (savedInstanceState == null) {
@@ -129,7 +129,7 @@ public class ArticleDetailActivity extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         //starting animation while the data is being loaded
-
+        startCheckAnimation();
         return ArticleLoader.newAllArticlesInstance(this);
     }
 
@@ -137,6 +137,7 @@ public class ArticleDetailActivity extends AppCompatActivity
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
         setUpActivity();
+        //animationView.setVisibility(View.INVISIBLE);
         //Toast.makeText(ArticleDetailActivity.this,
         // "finished", Toast.LENGTH_SHORT).show();
 
@@ -199,7 +200,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
             return ArticleDetailFragment.newInstance(mCursor.
-                    getLong(ArticleLoader.Query._ID), transitionName);
+                    getLong(ArticleLoader.Query._ID));
         }
 
         @Override
@@ -208,6 +209,32 @@ public class ArticleDetailActivity extends AppCompatActivity
         }
     }
 
+
+    private void startCheckAnimation() {
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(2000);
+        animator.addUpdateListener(valueAnimator -> animationView.setProgress((Float) valueAnimator.getAnimatedValue()));
+
+        if (animationView.getProgress() == 0f) {
+            animator.start();
+        } else {
+            animationView.setProgress(0f);
+        }
+
+
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                animationView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                animationView.setVisibility(View.GONE);
+            }
+        });
+    }
 
 
 }

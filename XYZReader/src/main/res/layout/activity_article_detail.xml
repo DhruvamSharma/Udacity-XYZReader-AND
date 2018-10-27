@@ -26,5 +26,13 @@
     </FrameLayout>
 
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_animation"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:lottie_fileName="pencil_write.json"
+
+        android:layout_gravity="center" />
+
 
 </FrameLayout>
