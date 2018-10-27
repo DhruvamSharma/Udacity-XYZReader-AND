@@ -63,11 +63,6 @@ public class ArticleDetailActivity extends AppCompatActivity
             if (getIntent() != null && getIntent().getData() != null) {
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
                 mSelectedItemId = mStartId;
-                Bundle extras = getIntent().getExtras();
-
-                assert extras != null;
-
-                transitionName = extras.getString("TRANSITION_NAME");
             }
         }
 

@@ -29,6 +29,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
@@ -108,9 +110,9 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         rootLayout.setVisibility(View.INVISIBLE);
 
+
         revealX = intent.getIntExtra(getResources().getString(R.string.extra_reveal_x), 0);
         revealY = intent.getIntExtra(getResources().getString(R.string.extra_reveal_y), 0);
-
 
         ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -277,12 +279,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                 Intent intent = new Intent(Intent.ACTION_VIEW,
                         ItemsContract.Items.buildItemUri(getItemId(viewHolder.getAdapterPosition())));
 
-                intent.putExtra("TRANSITION_NAME", ViewCompat.getTransitionName(viewHolder.itemView));
-
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(ArticleListActivity.this,
-                        viewHolder.itemView, Objects.requireNonNull(ViewCompat.getTransitionName(viewHolder.itemView)));
-
-                startActivity( intent, optionsCompat.toBundle());
+                startActivity( intent);
             });
 
         }
@@ -314,7 +311,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
             // create the animator for this view (the start radius is zero)
             Animator circularReveal = ViewAnimationUtils.createCircularReveal(rootLayout, x, y, 0, finalRadius);
-            circularReveal.setDuration(400);
+            circularReveal.setDuration(1000);
             circularReveal.setInterpolator(new AccelerateInterpolator());
 
             // make the view visible and start the animation

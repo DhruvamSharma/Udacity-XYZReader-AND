@@ -103,14 +103,6 @@ public class ArticleDetailFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            postponeEnterTransition();
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setSharedElementEnterTransition(TransitionInflater.from(getActivityCast()
-                    .getBaseContext()).inflateTransition(android.R.transition.move));
-        }
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
@@ -264,18 +256,12 @@ public class ArticleDetailFragment extends Fragment implements
 
                                 updateStatusBar();
 
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    startPostponedEnterTransition();
-                                }
                             }
                         }
 
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                startPostponedEnterTransition();
-                            }
 
                         }
                     });
