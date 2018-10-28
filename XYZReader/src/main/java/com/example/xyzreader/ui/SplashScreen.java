@@ -29,7 +29,7 @@ public class SplashScreen extends AppCompatActivity {
 
             base = findViewById(R.id.main_layout_splashscreen);
             presentActivity(base);
-            finish();
+            //finish();
 
         }, 500);
 

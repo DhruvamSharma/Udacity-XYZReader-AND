@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -28,14 +29,18 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,7 +70,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     private static final int VIEW_TYPE_NORMAL = 1;
     private static final int VIEW_TYPE_FULL_SIZE = 2;
 
-    public DynamicHeightNetworkImageView thumbnail;
+    public ImageView thumbnail;
 
 
     View rootLayout;
@@ -244,14 +249,14 @@ public class ArticleListActivity extends AppCompatActivity implements
                 }
 
 
-                holder.thumbnailView.setImageUrl(
-                        mCursor.getString(ArticleLoader.Query.THUMB_URL),
-                        ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-                holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+            Glide.with(ArticleListActivity.this)
+                    .load(Uri.parse(mCursor.getString(ArticleLoader.Query.THUMB_URL)))
+                    .into(holder.thumbnailView);
+
+
 
                 //Setting the transition name
                 clickHandler(holder);
-                ViewCompat.setTransitionName(holder.itemView, mCursor.getString(ArticleLoader.Query.TITLE));
 
 
 
@@ -287,7 +292,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     public class ViewHolderFullSize extends RecyclerView.ViewHolder {
         public ConstraintLayout mainBackground;
-        public DynamicHeightNetworkImageView thumbnailView;
+        public ImageView thumbnailView;
         public TextView titleView;
         public TextView subtitleView;
 
