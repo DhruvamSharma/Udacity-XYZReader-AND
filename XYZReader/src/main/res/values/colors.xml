@@ -33,4 +33,5 @@
     <color name="royal_blue_dark">#3F68D9</color>
     <color name="grammarly_green_color">#2cb673</color>
     <color name="background_light">@android:color/transparent</color>
+    <color name="translucent_background">#45cccccc</color>
 </resources>
